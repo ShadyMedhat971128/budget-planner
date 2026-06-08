@@ -1,0 +1,74 @@
+WBS,Phase,Task,Deliverable,Effort (days),Dependencies,Priority
+1,Scaffolding,Initialize monorepo and project structure,Monorepo with backend/ web/ mobile/ shared/ infra/,0.5,,High
+1.1,Scaffolding,Configure Git hooks and conventions,pre-commit config (ruff mypy ESLint Prettier),0.5,1,High
+1.2,Scaffolding,Set up Podman Compose environment,compose.yaml with Postgres Redis Supabase Auth,1,1,High
+1.3,Scaffolding,Create FastAPI skeleton with health endpoint,/health endpoint returning OK,0.5,1.2,High
+1.4,Scaffolding,Scaffold Next.js with Tailwind + shadcn/ui,Next.js project with starter page,0.5,1,Medium
+1.5,Scaffolding,Scaffold Expo with Expo Router + NativeWind,Expo project with starter screen,0.5,1,Medium
+1.6,Scaffolding,Configure Cloudflare Tunnel (cloudflared),Tunnel running pointing to localhost:8000,0.5,1.3,Medium
+1.7,Scaffolding,Set up environment config with pydantic-settings,.env files + config module,0.5,1.3,High
+2,Auth & Data Layer,Set up Supabase Auth self-hosted,Supabase Auth containers running with Podman,1,1.2,High
+2.1,Auth & Data Layer,Build FastAPI JWT middleware,verify_supabase_token dependency,0.5,2,High
+2.2,Auth & Data Layer,Design SQLAlchemy models + Alembic migrations,User Transaction Budget Category models + migration files,1,2.1,High
+2.3,Auth & Data Layer,Build Pydantic schemas for all models,Pydantic v2 schemas (request validation + response),0.5,2.2,High
+2.4,Auth & Data Layer,Implement CRUD endpoints for transactions,CRUD endpoints tested via Swagger,1,2.3,High
+2.5,Auth & Data Layer,Implement CRUD endpoints for budgets,CRUD endpoints tested via Swagger,0.5,2.3,High
+2.6,Auth & Data Layer,Write RLS policies on Postgres tables,RLS policies per table,0.5,2.2,High
+2.7,Auth & Data Layer,Integrate Supabase Auth on web (Next.js),Login signup pages working,1,2,High
+2.8,Auth & Data Layer,Integrate Supabase Auth on mobile (Expo),Login signup screens working,1,2,High
+3,Core UI & API,Build web dashboard (Next.js App Router),Dashboard with transaction list and summary,2,2.4,High
+3.1,Core UI & API,Build transaction list with React Query,List create edit delete with optimistic updates,1.5,3,High
+3.2,Core UI & API,Build budget creation/edit forms,Budget forms with validation,1,3,High
+3.3,Core UI & API,Build category management UI,Category CRUD picker management,0.5,3,Medium
+3.4,Core UI & API,Build mobile dashboard (Expo Router),Dashboard with transaction list,2,2.8,High
+3.5,Core UI & API,Build mobile transaction list with swipe actions,Swipe edit delete offline-aware,1.5,3.4,High
+3.6,Core UI & API,Build mobile budget forms,Budget forms with validation,1,3.4,High
+3.7,Core UI & API,Add pagination filtering sorting to API,Pagination filter sort parameters on all list endpoints,1,2.4,Medium
+3.8,Core UI & API,Add error handling middleware,Unified error response format + Sentry integration,0.5,2.4,Medium
+4,Local-First Sync,Set up RxDB on mobile (SQLite adapter),RxDB database with collections,1,3.5,High
+4.1,Local-First Sync,Set up RxDB on web (IndexedDB adapter),RxDB with IndexedDB adapter,1,3,High
+4.2,Local-First Sync,Build RxDB replication protocol on FastAPI,Pull + push endpoints for each collection,2,2.4,High
+4.3,Local-First Sync,Implement offline detection + queue,Online/offline state management background sync,1,4,High
+4.4,Local-First Sync,Build sync status indicator component,SyncStatus component (pending syncing synced error),0.5,4.3,Medium
+4.5,Local-First Sync,Implement conflict detection on server (LWW + per-field),Conflict detection + storage in conflicts table,1,4.2,High
+4.6,Local-First Sync,Build conflict resolution UI mobile,Conflict resolution screen showing local vs server,1.5,4.5,Medium
+4.7,Local-First Sync,Build conflict resolution UI web,Conflict resolution page showing local vs server,1,4.5,Medium
+4.8,Local-First Sync,Write test suite for sync scenarios,Pytest test suite for sync endpoints,1.5,4.2,Medium
+5,AI Features,Build spending report generator (rule-based),Monthly report using pandas aggregation,1,3.7,Medium
+5.1,AI Features,Integrate LLM (OpenAI) for smart reports,LLM-powered report endpoint,1.5,5,Low
+5.2,AI Features,Build auto-categorization of transactions,LLM or classifier endpoint that suggests category,1,5.1,Low
+5.3,AI Features,Build monthly narrative report endpoint,Narrative endpoint returning formatted report,1,5.1,Low
+5.4,AI Features,Build basic spend prediction (linear regression),Prediction endpoint for current month forecast,1.5,5,Low
+5.5,AI Features,Set up ARQ + Redis for background task queue,ARQ worker processing report generation async,1,5,Medium
+5.6,AI Features,Add rate limiting to AI endpoints,Rate limiter per user for AI routes,0.5,5.1,Medium
+5.7,AI Features,Add caching layer for AI responses,Redis cache for repeated report requests,0.5,5.5,Low
+6,CI/CD,Create GitHub Actions lint workflow,CI checks ruff mypy ESLint on push,0.5,1,Medium
+6.1,CI/CD,Create GitHub Actions test workflow,CI runs pytest + vitest on push,1,2.4,Medium
+6.2,CI/CD,Create GitHub Actions build + push workflow,Build container image push to ghcr.io,1,6.1,Medium
+6.3,CI/CD,Create GitHub Actions migration workflow,Alembic migrations run as CI check step,0.5,6.1,Medium
+6.4,CI/CD,Add deploy trigger to CI workflow,SSH deploy or webhook to your server,1,6.2,Low
+6.5,CI/CD,Add pre-commit enforcement in CI,pre-commit run --all-files in CI,0.5,6,Medium
+7,Production Hardening,Add rate limiting middleware (slowapi),Global rate limiter per IP per user,0.5,3.8,Medium
+7.1,Production Hardening,Configure CORS properly,CORS allowlist for web mobile + tunnel origins,0.25,3.8,High
+7.2,Production Hardening,Set up Caddy reverse proxy with auto HTTPS,Caddyfile TLS working with Let's Encrypt,1,2,High
+7.3,Production Hardening,Implement database backup strategy,pg_dump script running weekly cron,0.5,2.2,Medium
+7.4,Production Hardening,Add graceful shutdown handling,SIGTERM handler draining connections,0.5,3.8,Medium
+7.5,Production Hardening,Add health check + readiness endpoints,Readiness endpoint checking DB + Redis connectivity,0.25,3.8,Medium
+7.6,Production Hardening,Set up Cloudflare DNS + Tunnel for production,Production URL resolving through tunnel,1,7.2,High
+8,Monitoring & Observability,Integrate Sentry SDK (backend),Sentry capturing errors from FastAPI,0.5,3.8,Medium
+8.1,Monitoring & Observability,Integrate Sentry SDK (web + mobile),Sentry capturing frontend errors and breadcrumbs,0.5,3,Medium
+8.2,Monitoring & Observability,Add structured logging (structlog),JSON-formatted logs with request IDs,1,3.8,Medium
+8.3,Monitoring & Observability,Add OpenTelemetry auto-instrumentation,Trace spans for all requests + DB queries,1,8,Low
+8.4,Monitoring & Observability,Set up Prometheus metrics endpoint,/metrics endpoint with request count latency,1,3.8,Medium
+8.5,Monitoring & Observability,Set up Grafana dashboard,Grafana dashboard with key metrics,1.5,8.4,Low
+8.6,Monitoring & Observability,Create Discord webhook for signup events,Discord channel receiving signup notifications,0.5,2,High
+8.7,Monitoring & Observability,Build user feedback endpoint + webhook,Feedback DB table + Discord notification,1,3.8,Medium
+8.8,Monitoring & Observability,Set up uptime monitoring (UptimeRobot / Grafana Cloud),Uptime monitor pinging production URL,0.25,7.6,Medium
+8.9,Monitoring & Observability,Add alerting rules (error rate spike),Alert notification via Discord,0.5,8.4,Low
+9,Polish & Scale,Optimize slow queries (N+1 fixes + indexing),Query profiling results + DB indexes,1,3.7,Low
+9.1,Polish & Scale,Add push notifications (Firebase),Push notification on sync conflict report ready,2,4.3,Low
+9.2,Polish & Scale,Build weekly email report (Resend),Weekly email to user with spending summary,2,5.1,Low
+9.3,Polish & Scale,Add PWA support for web,PWA manifest + service worker loading indicator,0.5,3,Low
+9.4,Polish & Scale,Write E2E tests (Playwright),E2E test suite for main user journeys,2,6.1,Low
+9.5,Polish & Scale,Add feature flags system,Feature flag table + middleware + admin toggle,1.5,3.8,Low
+9.6,Polish & Scale,Build monitoring app prototype,Separate micro-app showing signups errors server health,3,8.9,Low
