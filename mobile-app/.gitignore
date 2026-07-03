@@ -42,3 +42,6 @@ example
 /ios
 /android
 *.lock
+# environment variables
+.env
+.env.local
