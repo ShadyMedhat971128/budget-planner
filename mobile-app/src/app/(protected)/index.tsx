@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList } from "react-native";
+import { Text, View, StyleSheet, FlatList, Button } from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 interface BasicAnalysis {
@@ -18,8 +18,8 @@ interface Transaction {
 export default function Index() {
   
   const [basicAnalysis, setBasicAnalysis] = useState<BasicAnalysis>({
-    totalIncome: 0,
-    totalExpenses: 0,
+    totalIncome: 2000,
+    totalExpenses: 3000,
     netIncome: 0,
     savingsRate: 0,
   });
@@ -27,8 +27,8 @@ export default function Index() {
   let analysisData = [
     { id: '1', title: 'Total Income', value: basicAnalysis.totalIncome, color: 'bg-green-200' },
     { id: '2', title: 'Total Expenses', value: basicAnalysis.totalExpenses, color: 'bg-red-200' },
-    { id: '3', title: 'Net Income', value: basicAnalysis.netIncome, color: 'bg-blue-200' },
-    { id: '4', title: 'Savings Rate', value: basicAnalysis.savingsRate, color: 'bg-yellow-200' },
+    // { id: '3', title: 'Net Income', value: basicAnalysis.netIncome, color: 'bg-blue-200' },
+    // { id: '4', title: 'Savings Rate', value: basicAnalysis.savingsRate, color: 'bg-yellow-200' },
   ];
 
   const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([
@@ -40,7 +40,14 @@ export default function Index() {
   return (
     <SafeAreaView className="flex gap-2 py-5 items-center justify-center min-w-screen">
         {/* desgin 4 main cards => 2 in a row */}
-
+      <View className="w-full p-4 flex-col justify-center items-center gap-2">
+        <Text className="text-2xl font-bold mb-2">
+          Current Balance: 
+        </Text>
+        <Text className="text-lg font-bold mb-2">
+          ${ (basicAnalysis.totalIncome - basicAnalysis.totalExpenses).toFixed(2) }  
+        </Text>
+      </View>
       <FlatList
         numColumns={2} 
         className="w-full"
@@ -54,6 +61,10 @@ export default function Index() {
         )}
         keyExtractor={(item) => item.id}
       />
+      {/* button */}
+      <View className="w-full p-4">
+        <Button title="Add Transaction" />
+      </View>
       {/* recent transactions */}
       <View className="w-full p-4">
         <Text className="text-lg font-bold mb-2">Recent Transactions</Text>

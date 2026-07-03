@@ -5,6 +5,9 @@ export default function ProtectedLayout() {
     <Tabs.Screen name="index" 
         options={{ title: "Home" ,
         tabBarIcon: () => <Text>🏠</Text> }} />
+    <Tabs.Screen name="cards" 
+        options={{ title: "Cards" ,
+        tabBarIcon: () => <Text>💳</Text> }} />
     <Tabs.Screen name="analysis" 
         options={{ title: "Analysis" , 
         tabBarIcon: () => <Text>📊</Text> }} />
