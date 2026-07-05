@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet, FlatList, Button } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { supabase } from "@/utils/supabase";
 interface BasicAnalysis {
   totalIncome: number;
   totalExpenses: number;
@@ -11,8 +12,9 @@ interface Transaction {
   id: string;
   title: string;
   type: 'income' | 'expense';
+  payment_method: 'cash' | 'card' | 'bank_transfer' | 'other';
   amount: number;
-  date: string;
+  created_at: string;
 }
 
 export default function Index() {
@@ -25,18 +27,39 @@ export default function Index() {
   });
 
   let analysisData = [
-    { id: '1', title: 'Total Income', value: basicAnalysis.totalIncome, color: 'bg-green-200' },
-    { id: '2', title: 'Total Expenses', value: basicAnalysis.totalExpenses, color: 'bg-red-200' },
+    { id: '1', title: 'Total Income',
+       value: basicAnalysis.totalIncome, color: 'bg-green-200' },
+    { id: '2', title: 'Total Expenses',
+       value: basicAnalysis.totalExpenses, color: 'bg-red-200' },
     // { id: '3', title: 'Net Income', value: basicAnalysis.netIncome, color: 'bg-blue-200' },
     // { id: '4', title: 'Savings Rate', value: basicAnalysis.savingsRate, color: 'bg-yellow-200' },
   ];
 
   const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([
-    { id: '1', title: 'Salary', type: 'income', amount: 5000, date: '2023-01-01' },
-    { id: '2', title: 'Rent', type: 'expense', amount: 1500, date: '2023-01-02' },
-    { id: '3', title: 'Groceries', type: 'expense', amount: 200, date: '2023-01-03' },
-    { id: '4', title: 'Utilities', type: 'expense', amount: 100, date: '2023-01-04' },
+    // { id: '1', title: 'Salary', type: 'income', amount: 5000, created_at: '2023-01-01' },
+    // { id: '2', title: 'Rent', type: 'expense', amount: 1500, created_at: '2023-01-02' },
+    // { id: '3', title: 'Groceries', type: 'expense', amount: 200, created_at: '2023-01-03' },
+    // { id: '4', title: 'Utilities', type: 'expense', amount: 100, created_at: '2023-01-04' },
   ]);
+
+  useEffect(() => {
+  // fetch data from supabase and update state
+  
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from('transactions')
+        .select('*') ;
+    
+        if (error) {
+        console.error(error);
+        // return;
+      }
+  setRecentTransactions(data ?? []);
+    // setRecentTransactions(data as Transaction[]);
+    }
+    fetchData();
+  }, []);
+
   return (
     <SafeAreaView className="flex gap-2 py-5 items-center justify-center min-w-screen">
         {/* desgin 4 main cards => 2 in a row */}

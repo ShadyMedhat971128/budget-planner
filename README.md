@@ -32,23 +32,23 @@ The goal of this project is to build a cross-platform budget planning app that a
 
 ### 📱 Mobile Front-End
 
-* **Framework:** [React Native](https://reactnative.dev/)
-* **Goal:** Smooth, native-like experience for iOS and Android
+* **Framework:** [EXPO](https://expo.dev/)
+* **Goal:** Smooth, native-like experience for iOS and Android using [React Native](https://reactnative.dev/)
 
 ### 🔧 Back-End
 
-* **Preferred:** [Python Flask](https://flask.palletsprojects.com/)
+* **Preferred:** [Supabase](https://flask.palletsprojects.com/)
 * **Note:** Open to suggestions for frameworks/languages that better suit the project
 
 ### ⚙️ Platform Engineering
 
-* **Tools:** Docker, Kubernetes
+* **Tools:** Docker/Podman, Kubernetes
 * **Goal:** Scalable and containerized infrastructure
 
-### ☁️ Cloud Infrastructure
+<!-- ### ☁️ Cloud Infrastructure
 
 * **Tools:** Terraform, AWS
-* **Goal:** Infrastructure-as-Code (IaC), CI/CD, and secure cloud hosting
+* **Goal:** Infrastructure-as-Code (IaC), CI/CD, and secure cloud hosting -->
 
 ---
 
