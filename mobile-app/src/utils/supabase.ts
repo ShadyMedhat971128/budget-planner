@@ -13,7 +13,6 @@ export const supabase = createClient(
   process.env.EXPO_PUBLIC_SUPABASE_KEY!,
   {
     db: { schema: 'budget_planner'},
-    
     auth: {
       storage: secureStorage,
       autoRefreshToken: true,

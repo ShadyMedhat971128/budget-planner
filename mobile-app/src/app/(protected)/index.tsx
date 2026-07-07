@@ -17,7 +17,7 @@ interface Transaction {
   created_at: string;
 }
 
-export default function Index() {
+export default function Home() {
   
   const [basicAnalysis, setBasicAnalysis] = useState<BasicAnalysis>({
     totalIncome: 2000,
